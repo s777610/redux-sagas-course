@@ -1,8 +1,8 @@
-import {GET_USERS_SUCCESS, USERS_ERROR} from '../actions/types'
+import { GET_USERS_SUCCESS, USERS_ERROR } from "../actions/types";
 
 const INITIAL_STATE = {
   items: [],
-  error: ''
+  error: ""
 };
 
 export default function users(state = INITIAL_STATE, action) {
@@ -22,4 +22,3 @@ export default function users(state = INITIAL_STATE, action) {
       return state;
   }
 }
-

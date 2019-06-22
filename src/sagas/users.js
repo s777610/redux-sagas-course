@@ -1,7 +1,18 @@
-import {takeEvery, takeLatest, take, call, fork, put} from 'redux-saga/effects';
-import {GET_USERS_REQUEST, CREATE_USER_REQUEST, DELETE_USER_REQUEST} from '../actions/types';
-import {getUsersSuccess, usersError} from '../actions/users';
-import * as api from '../api/users';
+import {
+  takeEvery,
+  takeLatest,
+  take,
+  call,
+  fork,
+  put
+} from "redux-saga/effects";
+import {
+  GET_USERS_REQUEST,
+  CREATE_USER_REQUEST,
+  DELETE_USER_REQUEST
+} from "../actions/types";
+import { getUsersSuccess, usersError } from "../actions/users";
+import * as api from "../api/users";
 
 // This is a Worker Sagas
 function* getUsers() {
@@ -13,13 +24,17 @@ function* getUsers() {
     // Once promise is resolved middleware resumes saga,
     // until the next yield statement is found,
     // put: Dispatches an action to the Redux store
-    yield put(getUsersSuccess({
-      items: result.data.data
-    }))
+    yield put(
+      getUsersSuccess({
+        items: result.data.data
+      })
+    );
   } catch (e) {
-    yield put(usersError({
-      error: "An error occurred when trying to get the users"
-    }))
+    yield put(
+      usersError({
+        error: "An error occurred when trying to get the users"
+      })
+    );
   }
 }
 
@@ -33,13 +48,15 @@ function* watchGetUsersRequest() {
 // This is a worker sagas
 function* createUser(action) {
   try {
-    const {firstName, lastName} = action.payload;
-    yield call(api.createUser, {firstName, lastName});
+    const { firstName, lastName } = action.payload;
+    yield call(api.createUser, { firstName, lastName });
     yield call(getUsers);
   } catch (e) {
-    yield put(usersError({
-      error: "An error occurred when trying to create the user"
-    }))
+    yield put(
+      usersError({
+        error: "An error occurred when trying to create the user"
+      })
+    );
   }
 }
 
@@ -52,15 +69,17 @@ function* deleteUser({ userId }) {
     yield call(api.deleteUser, { userId });
     yield call(getUsers);
   } catch (e) {
-    yield put(usersError({
-      error: "An error occurred when trying to delete the user"
-    }))
+    yield put(
+      usersError({
+        error: "An error occurred when trying to delete the user"
+      })
+    );
   }
 }
 
 function* watchDeleteUserRequest() {
   while (true) {
-    console.log('while true...!');
+    console.log("while true...!");
     // take() return the action that was dispatched
     const action = yield take(DELETE_USER_REQUEST);
     yield call(deleteUser, {
